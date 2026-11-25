@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# curl -sL dork40.github.io/lectern | bash    (installs the latest lectern, runs again to update)
+set -e
+command -v pacman >/dev/null || { echo "Arch-based systems only: see https://github.com/dork40/lectern"; exit 1; }
+url=$(curl -fsSL https://api.github.com/repos/dork40/lectern/releases/latest | grep -o 'https://[^"]*\.pkg\.tar\.zst' | head -1)
+f=$(mktemp -d)/${url##*/}
+curl -fsSL -o "$f" "$url" && sudo pacman -U --needed --noconfirm "$f"
